@@ -44,7 +44,7 @@ def update_selection(entry_object):
 
     for i in range(0,min(max_apps,len(l.filtered_entries))):
         label = Gtk.Label()
-        text = GLib.markup_escape_text(l.filtered_entries[i])
+        text = GLib.markup_escape_text(l.filtered_entries[i].getName())
         label.set_markup("<span foreground=\"gray\" font_desc=\"19.0\">" + text + "</span>")
         label.set_max_width_chars(15)
         label.set_ellipsize(Pango.EllipsizeMode.END)
@@ -57,6 +57,9 @@ def update_selection(entry_object):
 entry.connect("changed", update_selection)
 
 def run_selected(_):
+    if selected < 0:
+        l.run_selected(0)
+
     l.run_selected(selected)
 
 entry.connect("activate", run_selected)

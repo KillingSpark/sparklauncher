@@ -16,11 +16,10 @@ class EntryLoader:
                 desktop_file = subdir+"/"+desktop_file
                 if desktop_file[-8:] == ".desktop":
                     entry = DesktopEntry(desktop_file)
-                    try:
-                        entry.validate()
-                        self.DESKTOP_ENTRIES[entry.getName()] = entry
-                    except xdg.Exceptions.ValidationError, e:
-                        continue
+                    
+                    if not (entry.getName() == None or entry.getName() == ""):
+                        if not (entry.getExec() == None or entry.getExec() == ""):
+                            self.DESKTOP_ENTRIES[entry.getName()] = entry
 
     def load(self):                    
         self.load_dir(self.GLOBAL_DIR_PATH)

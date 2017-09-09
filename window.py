@@ -3,6 +3,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
+from gi.repository import GLib
 
 
 import launcher
@@ -43,7 +44,8 @@ def update_selection(entry_object):
 
     for i in range(0,min(max_apps,len(l.filtered_entries))):
         label = Gtk.Label()
-        label.set_markup("<span foreground=\"gray\" font_desc=\"19.0\">" + l.filtered_entries[i] + "</span>")
+        text = GLib.markup_escape_text(l.filtered_entries[i])
+        label.set_markup("<span foreground=\"gray\" font_desc=\"19.0\">" + text + "</span>")
         label.set_max_width_chars(15)
         label.set_ellipsize(Pango.EllipsizeMode.END)
         labelBox.add(label)
@@ -88,7 +90,8 @@ def handle_keys(widget, key_event):
             selected -= 1
             labelBox.get_children()[selected].override_background_color(Gtk.StateType.NORMAL, col_selected)
     
-    elif True:
+    #not enter
+    elif not key_event.keyval == 65293:
         labelBox.get_children()[selected].override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(0,0,0,0))
         selected = -1
 

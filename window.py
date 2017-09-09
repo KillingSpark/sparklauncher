@@ -2,6 +2,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Pango
+
 
 import launcher
 
@@ -48,6 +50,8 @@ def update_selection(entry_object):
     for i in range(0,min(max_apps,len(l.filtered_entries))):
         label = Gtk.Label()
         label.set_markup("<span foreground=\"gray\" font_desc=\"19.0\">" + l.filtered_entries[i] + "</span>")
+        label.set_max_width_chars(15)
+        label.set_ellipsize(Pango.EllipsizeMode.END)
         labelBox.add(label)
     
     labelBox.add(Gtk.Label("  "))

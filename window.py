@@ -27,7 +27,7 @@ labelBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 win.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(.5,.5,.5,.5))
 
 provider = Gtk.CssProvider()
-provider.load_from_data('.entry { background: black; color: white}')
+provider.load_from_data('.entry { background: black; color: white; border-radius: 0px}')
 Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
     Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 

@@ -19,12 +19,21 @@ class Launcher:
             self.count_dict = json.loads(json_count)
 
         self.entries = entryLoader.EntryLoader().load()
+        self.ever_started = list()
 
-        self.filtered_entries = list(self.entries)
+        for entry in self.entries:
+            try:
+                #if this worked it got started at least once
+                count = self.count_dict[entry]
+                self.ever_started.append(self.entries[entry])
+            except KeyError:
+                pass
+
+        self.filtered_entries = self.ever_started
 
     def filter(self, tokens):
-        if len(tokens) == 0:
-            self.filtered_entries = self.entries
+        if len(tokens) == 1 and tokens[0] == '':
+            self.filtered_entries = self.ever_started
             return
 
         new_filtered = list()

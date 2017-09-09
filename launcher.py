@@ -36,8 +36,8 @@ class Launcher:
         for name in self.filtered_entries:
             print(name)
 
-    def run_selected(self):
-        exec_str = str.split(str(self.entries[self.filtered_entries[0]].getExec()), " ")
+    def run_selected(self, index):
+        exec_str = str.split(str(self.entries[self.filtered_entries[index]].getExec()), " ")
         executable = exec_str[0]
         args = exec_str[1:]
 

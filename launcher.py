@@ -5,17 +5,14 @@ import os
 import json
 import subprocess
 
+
 class AppEntry:
     def __init__(self, desk_entry):
         self.name = desk_entry.getName()
         self.exe = desk_entry.getExec()
 
     def getName(self):
-        small_path = self.name
-        max_len = 40
-        if len(self.name) > max_len:
-            small_path = "..."+self.name[-max_len:]
-        return small_path
+        return self.name
 
     def start(self):
         exec_str = str.split(str(self.exe), " ")
@@ -28,21 +25,25 @@ class AppEntry:
             if not arg.startswith('%'):
                 filtered_args.append(arg)
 
-        
         print(executable)
         print(filtered_args)
 
         os.execvp(executable, filtered_args)
+
 
 class PathEntry:
     def __init__(self, path):
         self.name = path
 
     def getName(self):
-        return self.name
+        small_path = self.name
+        max_len = 40
+        if len(self.name) > max_len:
+            small_path = "..." + self.name[-max_len:]
+        return small_path
 
     def start(self):
-        subprocess.call(["xdg-open",self.name])
+        subprocess.call(["xdg-open", self.name])
         exit()
 
 
@@ -50,7 +51,7 @@ class Launcher:
     def __init__(self):
         self.count_dict = {}
 
-        self.count_file_path = os.path.expanduser("~")+"/.sparklauncher"
+        self.count_file_path = os.path.expanduser("~") + "/.sparklauncher"
         if os.path.exists(self.count_file_path):
             count_file = os.open(self.count_file_path, os.O_RDWR)
             json_count = os.read(count_file, 2048)
@@ -61,12 +62,12 @@ class Launcher:
 
         for entry in loaded:
             self.entries[entry] = AppEntry(loaded[entry])
-        
+
         self.ever_started = list()
 
         for entry in self.entries:
             try:
-                #if this worked it got started at least once
+                # if this worked it got started at least once
                 count = self.count_dict[entry]
                 self.ever_started.append(self.entries[entry])
             except KeyError:
@@ -83,17 +84,19 @@ class Launcher:
         for name in self.entries:
 
             contains = True
-            for token in tokens: 
-                contains = contains and (str(token).upper() in str(name).upper())
+            for token in tokens:
+                contains = contains and (
+                    str(token).upper() in str(name).upper())
                 if not contains:
                     break
             if contains:
                 new_filtered.append(self.entries[name])
-        
+
         new_filtered.sort(key=lambda x: x.getName())
 
-        for path in self.find_matching_path(tokens, os.path.expanduser("~")):
-            new_filtered.append(PathEntry(path))
+        if token[0] == "~" or token[0] == "/":
+            for path in self.find_matching_path(tokens[1:], os.path.expanduser(token[0])):
+                new_filtered.append(PathEntry(path))
 
         new_filtered.sort(key=self.map_entry_count, reverse=True)
         self.filtered_entries = new_filtered
@@ -102,10 +105,10 @@ class Launcher:
         paths = list()
         for name in os.listdir(path):
             if not name.startswith("."):
-                #if only one token is left, files are ok too
+                # if only one token is left, files are ok too
                 if len(tokens) == 1 or os.path.isdir(os.path.join(path, name)):
                     if tokens[0].upper() in name.upper():
-                        paths.append(path+"/"+name)
+                        paths.append(path + "/" + name)
 
         if len(tokens) > 1:
             hits = list()
@@ -116,15 +119,13 @@ class Launcher:
         else:
             return paths
 
-
-
     def map_entry_count(self, entry):
-            count = 0
-            try:
-                count = self.count_dict[entry.getName()]
-            except KeyError:
-                pass
-            return count
+        count = 0
+        try:
+            count = self.count_dict[entry.getName()]
+        except KeyError:
+            pass
+        return count
 
     def print_selection(self):
         for name in self.filtered_entries:
@@ -145,6 +146,3 @@ class Launcher:
         os.write(count_file, json_count)
 
         selected.start()
-
-        
-

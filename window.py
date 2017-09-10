@@ -10,7 +10,6 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
-from gi.repository import GLib
 
 import settings
 import launcher
@@ -62,11 +61,12 @@ def update_selection(entry_object):
 
     for i in range(0,min(settings.MAX_ENTRIES,len(l.filtered_entries))):
         label = Gtk.Label()
-        text = GLib.markup_escape_text(l.filtered_entries[i].getName())
-        label.set_markup("<span font_desc=\"19.0\">" + text + "</span>")
+        label.set_text(l.filtered_entries[i].getName())
         label.set_name("label")
-        label.set_max_width_chars(15)
-        label.set_ellipsize(Pango.EllipsizeMode.END)
+        label.set_ellipsize(Pango.EllipsizeMode.START)
+
+        #needed so the labels dont expand
+        label.set_max_width_chars(1)
         labelBox.add(label)
 
     labelBox.show_all()

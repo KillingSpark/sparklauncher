@@ -37,11 +37,7 @@ class PathEntry:
         self.name = path
 
     def getName(self):
-        small_path = self.name
-        max_len = settings.MAX_NAME_CHARS
-        if len(self.name) > max_len:
-            small_path = "..." + self.name[-max_len:]
-        return small_path
+        return self.name
 
     def start(self):
         subprocess.call(["xdg-open", self.name])

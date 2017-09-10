@@ -81,22 +81,25 @@ class Launcher:
             return
 
         new_filtered = list()
-        for name in self.entries:
 
-            contains = True
-            for token in tokens:
-                contains = contains and (
-                    str(token).upper() in str(name).upper())
-                if not contains:
-                    break
-            if contains:
-                new_filtered.append(self.entries[name])
+        #either file mode or app mode
+        if tokens[0] == "~" or tokens[0] == "/":
+            for path in self.find_matching_path(tokens[1:], os.path.expanduser(tokens[0])):
+                new_filtered.append(PathEntry(path))
+        else:
+            for name in self.entries:
+                contains = True
+                for token in tokens:
+                    contains = contains and (
+                        str(token).upper() in str(name).upper())
+                    if not contains:
+                        break
+                if contains:
+                    new_filtered.append(self.entries[name])
 
         new_filtered.sort(key=lambda x: x.getName())
 
-        if token[0] == "~" or token[0] == "/":
-            for path in self.find_matching_path(tokens[1:], os.path.expanduser(token[0])):
-                new_filtered.append(PathEntry(path))
+
 
         new_filtered.sort(key=self.map_entry_count, reverse=True)
         self.filtered_entries = new_filtered

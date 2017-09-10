@@ -60,8 +60,6 @@ def update_selection(entry_object):
         labelBox.add(label)
 
     labelBox.show_all()
-    labelCount = len(labelBox.get_children())+1
-    lablHeight = (labelBox.get_children()[0].get_allocation().height)
 
 entry.connect("changed", update_selection)
 

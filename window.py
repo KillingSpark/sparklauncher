@@ -16,6 +16,7 @@ import launcher
 
 win = Gtk.Window()
 win.connect("delete-event", Gtk.main_quit)
+win.set_skip_taskbar_hint(True)
 
 win.set_decorated(False)
 
@@ -108,6 +109,12 @@ def handle_keys(widget, key_event):
             labelBox.get_children()[SELECTED_INDEX].set_name("selected")
 
 win.connect("key-press-event",handle_keys)
+
+def exit_on_focus_lost(*_):
+    locking.delete_lock_file()
+    Gtk.main_quit()
+
+win.connect("focus-out-event", exit_on_focus_lost)
 
 win.show_all()
 

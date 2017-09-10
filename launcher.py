@@ -74,6 +74,8 @@ class Launcher:
                 pass
 
         self.filtered_entries = self.ever_started
+        self.filtered_entries.sort(key=lambda x: x.getName())
+        self.filtered_entries.sort(key=self.map_entry_count, reverse=True)
 
     def filter(self, tokens):
         if len(tokens) == 1 and tokens[0] == '':
@@ -98,9 +100,6 @@ class Launcher:
                     new_filtered.append(self.entries[name])
 
         new_filtered.sort(key=lambda x: x.getName())
-
-
-
         new_filtered.sort(key=self.map_entry_count, reverse=True)
         self.filtered_entries = new_filtered
 

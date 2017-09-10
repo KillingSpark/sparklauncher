@@ -3,10 +3,10 @@ The bestestes launcher in the whole universe WoopDi$$$$ingDoo
 
 ## Features ##
 ### Search all yours Apps! ###
-just type parts of the name and your faithful launcher will find your hearths desire
+Just type parts of the name and your faithful launcher will find your hearths desire
 
 ### Search your Files! ###
-start with a ~ to search through your home directory or with a / for your whole file system.
+Preface with a ~ + _space_ to search through your home directory or with a / + _space_ for your whole file system.
 you only need to type parts of the name of your directory/file and it will be found
 
 ### It is learning! ###
@@ -20,7 +20,7 @@ Sorry no install script yet, just put it anywhere, make window.py executable and
 Maybe set a kayboard shortcut or whatever.
 
 ## Notes ##
-in your home directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset.
+In your home directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset.
 if the launcher crashes maybe the lockfile that prevents multiple instances might be still there preventing it from opening,
 delete ~/.sparklauncherlock to make it available again. this shouldnt happen tho.
 

@@ -5,6 +5,7 @@ import os
 import json
 import subprocess
 
+import settings
 
 class AppEntry:
     def __init__(self, desk_entry):
@@ -37,7 +38,7 @@ class PathEntry:
 
     def getName(self):
         small_path = self.name
-        max_len = 40
+        max_len = settings.MAX_NAME_CHARS
         if len(self.name) > max_len:
             small_path = "..." + self.name[-max_len:]
         return small_path

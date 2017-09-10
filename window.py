@@ -1,3 +1,10 @@
+#! /usr/bin/python2
+
+import locking
+if locking.check_lock_file():
+    exit()
+locking.create_lock_file()
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -14,6 +21,8 @@ win.connect("delete-event", Gtk.main_quit)
 max_apps = 10
 width = 600
 height = 400
+selected = -1
+col_selected = Gdk.RGBA(.1,.1,.1,1)
 
 win.set_decorated(False)
 
@@ -57,6 +66,7 @@ def update_selection(entry_object):
 entry.connect("changed", update_selection)
 
 def run_selected(_):
+    locking.delete_lock_file()
     if selected < 0:
         l.run_selected(0)
 
@@ -64,16 +74,13 @@ def run_selected(_):
 
 entry.connect("activate", run_selected)
 
-
-selected = -1
-col_selected = Gdk.RGBA(.1,.1,.1,1)
-
 def handle_keys(widget, key_event):
     global selected
 
 
     #esc key value
     if key_event.keyval == 65307:
+        locking.delete_lock_file()
         Gtk.main_quit()
 
     #down

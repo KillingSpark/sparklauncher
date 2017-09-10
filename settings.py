@@ -10,6 +10,6 @@ WIN_HEIGHT = 400
 COL_BACKGROUND_ENTRYLIST = Gdk.RGBA()
 COL_BACKGROUND_ENTRYLIST.parse('#696969')
 
-SEARCHBAR_STYLE = '{ background: black; color: white; border-radius: 0px}'
-ENTRY_STYLE = '{ background: #696969; color: lightgrey; font-size: 19}'
+SEARCHBAR_STYLE = '{ background: black; color: white; border-radius: 0px; font-size: 19;}'
+ENTRY_STYLE = '{ background: #696969; color: lightgrey; font-size: 19;}'
 SELECTED_STYLE = '{ background: #434343; color: white}'

@@ -12,4 +12,4 @@ COL_BACKGROUND_ENTRYLIST.parse('#696969')
 
 SEARCHBAR_STYLE = '{ background: black; color: white; border-radius: 0px; font-size: 19px;}'
 ENTRY_STYLE = '{ background: #696969; color: lightgrey; font-size: 19px;}'
-SELECTED_STYLE = '{ background: #434343; color: white}'
+SELECTED_STYLE = '{ background: #434343; color: white; font-size: 19px;}'

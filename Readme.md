@@ -25,7 +25,7 @@ settings.py holds all the available settings. Get Wild!
 ![](https://i.imgur.com/qwe4Lhh.png) 
 
 ## Installing ##
-Sorry no install script yet, just put it anywhere, make window.py executable and have fun
+Sorry no install script yet, just put it anywhere, make main.py executable and have fun
 Maybe set a kayboard shortcut or whatever.
 
 ## Notes ##

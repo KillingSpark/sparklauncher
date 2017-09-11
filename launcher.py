@@ -49,9 +49,8 @@ class Launcher:
 
         self.count_file_path = os.path.expanduser("~") + "/.sparklauncher"
         if os.path.exists(self.count_file_path):
-            count_file = os.open(self.count_file_path, os.O_RDWR)
-            json_count = os.read(count_file, 2048)
-            self.count_dict = json.loads(json_count)
+            count_file = open(self.count_file_path, "r")
+            self.count_dict = json.load(count_file)
 
         loaded = desktopEntryLoader.EntryLoader().load()
         self.entries = {}
@@ -137,10 +136,6 @@ class Launcher:
         except KeyError:
             self.count_dict[selected.getName()] = 1
 
-        json_count = json.dumps(self.count_dict)
-        if not os.path.exists(self.count_file_path):
-            count_file = os.open(self.count_file_path, os.O_CREAT)
-        count_file = os.open(self.count_file_path, os.O_RDWR)
-        os.write(count_file, json_count)
 
+        json.dump(self.count_dict, open(self.count_file_path, "w"))
         selected.start()

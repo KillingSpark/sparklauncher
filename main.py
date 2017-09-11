@@ -100,6 +100,8 @@ def setup_window():
     MAIN_WINDOW.set_size_request(settings.WIN_WIDTH, settings.WIN_HEIGHT)
     MAIN_WINDOW.set_resizable(False)
 
+    SEARCH_ENTRY.set_name("search")
+
     MAIN_WINDOW.add(SEARCH_BOX)
     SEARCH_BOX.add(SEARCH_ENTRY)
     SEARCH_BOX.add(RESULT_BOX)
@@ -115,20 +117,20 @@ def connect_signals():
 
 def load_style_settings():
     select_provider = Gtk.CssProvider()
-    select_provider.load_from_data('#selected' + settings.SELECTED_STYLE)
+    select_provider.load_from_data(b'#selected' + settings.SELECTED_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), select_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     window_provider = Gtk.CssProvider()
-    window_provider.load_from_data('#window' + settings.WINDOW_STYLE)
+    window_provider.load_from_data(b'#window' + settings.WINDOW_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), window_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
 
     entry_provider = Gtk.CssProvider()
-    entry_provider.load_from_data('.entry' + settings.SEARCHBAR_STYLE)
+    entry_provider.load_from_data(b'#search' + settings.SEARCHBAR_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), entry_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     search_provider = Gtk.CssProvider()
-    search_provider.load_from_data('#label' + settings.ENTRY_STYLE)
+    search_provider.load_from_data(b'#label' + settings.ENTRY_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), search_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
 #startup the whole system

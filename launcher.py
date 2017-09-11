@@ -27,9 +27,8 @@ class AppEntry:
                 filtered_args.append(arg)
 
         print(executable)
-        print(filtered_args)
-
-        os.execvp(executable, filtered_args)
+        subprocess.Popen([executable])
+        exit()
 
 
 class PathEntry:

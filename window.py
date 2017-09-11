@@ -76,6 +76,7 @@ entry.connect("changed", update_selection)
 
 def run_selected(_):
     locking.delete_lock_file()
+    win.hide()
     if SELECTED_INDEX < 0:
         l.run_selected(0)
 

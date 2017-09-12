@@ -11,9 +11,13 @@ class AppEntry:
     def __init__(self, desk_entry):
         self.name = desk_entry.getName()
         self.exe = desk_entry.getExec()
+        self.icon = desk_entry.getIcon()
 
     def getName(self):
         return self.name
+
+    def getIcon(self):
+        return self.icon
 
     def start(self):
         exec_str = str.split(str(self.exe), " ")
@@ -38,6 +42,9 @@ class PathEntry:
     def getName(self):
         return self.name
 
+    def getIcon(self):
+        return "folder"
+
     def start(self):
         subprocess.call(["xdg-open", self.name])
         exit()
@@ -49,6 +56,9 @@ class BrowserEntry:
 
     def getName(self):
         return self.name
+
+    def getIcon(self):
+        return "chromium"
 
     def start(self):
         subprocess.call(["xdg-open", self.url])

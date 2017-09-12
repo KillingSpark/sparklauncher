@@ -48,7 +48,6 @@ def update_selection(entry_object):
     for i in range(0,min(settings.MAX_ENTRIES,len(ENTRY_LAUNCHER.filtered_entries))):
         label = Gtk.Label()
         label.set_text(ENTRY_LAUNCHER.filtered_entries[i].getName())
-        label.set_name("label")
         label.set_ellipsize(Pango.EllipsizeMode.START)
         label.entry = ENTRY_LAUNCHER.filtered_entries[i]
         label.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
@@ -57,8 +56,15 @@ def update_selection(entry_object):
         label.connect("button-press-event", clicked_label)
 
         #needed so the labels dont expand
-        label.set_max_width_chars(1)
-        RESULT_BOX.add(label)
+        label.set_max_width_chars(100)
+
+        button = Gtk.Button.new_from_icon_name(ENTRY_LAUNCHER.filtered_entries[i].getIcon(), 16)
+
+        hbox = Gtk.Box(Gtk.Orientation.HORIZONTAL, 10)
+        hbox.set_name("label")
+        hbox.add(button)
+        hbox.add(label)
+        RESULT_BOX.add(hbox)
 
     RESULT_BOX.show_all()
 
@@ -125,6 +131,11 @@ def connect_signals():
     SEARCH_ENTRY.connect("changed", update_selection)
 
 def load_style_settings():
+    icon_provider = Gtk.CssProvider()
+    icon_provider.load_from_data(b'.button' + settings.ICON_STYLE)
+    Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), icon_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+    
     select_provider = Gtk.CssProvider()
     select_provider.load_from_data(b'#selected' + settings.SELECTED_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), select_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)

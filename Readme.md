@@ -22,11 +22,11 @@ The most started apps will be in the list without having to type anything
 
 ### Customization is a thing!
 settings.py holds all the available settings. Get Wild!
-![](https://i.imgur.com/qwe4Lhh.png) 
+![](https://i.imgur.com/qwe4Lhh.png)
 
 ## Installing ##
 Sorry no install script yet, just put it anywhere, make main.py executable and have fun
-Maybe set a kayboard shortcut or whatever.
+Maybe set a keyboard shortcut or whatever.
 
 ## Notes ##
 In your home directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset.

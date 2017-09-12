@@ -3,6 +3,7 @@
 #check for running instance
 import locking
 if locking.check_lock_file():
+    print("already running")
     exit()
 locking.create_lock_file()
 
@@ -27,6 +28,7 @@ SEARCH_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 RESULT_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 SEARCH_ENTRY = Gtk.Entry()
 def clicked_label(label_with_entry,button_event):
+    locking.delete_lock_file()
     label_with_entry.entry.start()
 
 ##the handlers for signals

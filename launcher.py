@@ -67,7 +67,7 @@ class Launcher:
     def __init__(self):
         self.count_dict = {}
 
-        self.count_file_path = os.path.expanduser("~") + "/.sparklauncher"
+        self.count_file_path = os.path.expanduser("~") + "/.config/sparklauncher/.sparklauncher"
         if os.path.exists(self.count_file_path):
             count_file = open(self.count_file_path, "r")
             self.count_dict = json.load(count_file)

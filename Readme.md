@@ -32,8 +32,8 @@ Sorry no install script yet, just put it anywhere, make main.py executable and h
 Maybe set a keyboard shortcut or whatever.
 
 # Notes #
-In your home directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset.
+In your ~/.config/sparklauncher directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset.
 if the launcher crashes maybe the lockfile that prevents multiple instances might be still there preventing it from opening,
-delete ~/.sparklauncherlock to make it available again. this shouldnt happen tho.
+delete ~/.config/sparklauncherlock to make it available again. this shouldnt happen tho.
 
 

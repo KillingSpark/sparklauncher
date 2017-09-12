@@ -26,6 +26,8 @@ MAIN_WINDOW = Gtk.Window()
 SEARCH_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 RESULT_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 SEARCH_ENTRY = Gtk.Entry()
+def clicked_label(label_with_entry,button_event):
+    label_with_entry.entry.start()
 
 ##the handlers for signals
 def update_selection(entry_object):
@@ -46,6 +48,11 @@ def update_selection(entry_object):
         label.set_text(ENTRY_LAUNCHER.filtered_entries[i].getName())
         label.set_name("label")
         label.set_ellipsize(Pango.EllipsizeMode.START)
+        label.entry = ENTRY_LAUNCHER.filtered_entries[i]
+        label.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        #needed for obscure reasons to be clickable
+        label.set_has_window(True)
+        label.connect("button-press-event", clicked_label)
 
         #needed so the labels dont expand
         label.set_max_width_chars(1)

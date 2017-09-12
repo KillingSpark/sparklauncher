@@ -42,8 +42,28 @@ class PathEntry:
         subprocess.call(["xdg-open", self.name])
         exit()
 
+class BrowserEntry:
+    def __init__(self, name, url):
+        self.name = name
+        self.url = url
+
+    def getName(self):
+        return self.name
+
+    def start(self):
+        subprocess.call(["xdg-open", self.url])
+        exit()
 
 class Launcher:
+    def load_chrome_book_marks(self, subdict, bm_list):
+        if subdict["type"] == "url":
+            bm_list.append(BrowserEntry(subdict["name"], subdict["url"]))
+        if subdict["type"] == "folder":
+            for child in subdict["children"]:
+                bm_list = self.load_chrome_book_marks(child, bm_list)
+
+        return bm_list
+
     def __init__(self):
         self.count_dict = {}
 
@@ -51,6 +71,31 @@ class Launcher:
         if os.path.exists(self.count_file_path):
             count_file = open(self.count_file_path, "r")
             self.count_dict = json.load(count_file)
+
+        #load chromium bookmarks
+        self.chrome_book_marks = {}
+        self.book_marks_file_path = os.path.expanduser("~") + "/.config/chromium/Default/Bookmarks"
+        if os.path.exists(self.book_marks_file_path):
+            book_marks_file = open(self.book_marks_file_path, "r")
+            chrome_book_marks_folders = json.load(book_marks_file)
+            bm_list = list()
+            for root in chrome_book_marks_folders["roots"]:
+                  self.load_chrome_book_marks(chrome_book_marks_folders["roots"][root], bm_list)
+            
+            for bm in bm_list:
+                self.chrome_book_marks[bm.getName()] = bm
+        
+        #load chrome bookmarks
+        self.book_marks_file_path = os.path.expanduser("~") + "/.config/chrome/Default/Bookmarks"
+        if os.path.exists(self.book_marks_file_path):
+            book_marks_file = open(self.book_marks_file_path, "r")
+            chrome_book_marks_folders = json.load(book_marks_file)
+            bm_list = list()
+            for root in chrome_book_marks_folders["roots"]:
+                  self.load_chrome_book_marks(chrome_book_marks_folders["roots"][root], bm_list)
+            
+            for bm in bm_list:
+                self.chrome_book_marks[bm.getName()] = bm
 
         loaded = desktopEntryLoader.EntryLoader().load()
         self.entries = {}
@@ -79,10 +124,20 @@ class Launcher:
 
         new_filtered = list()
 
-        #either file mode or app mode
+        #only one mode at a time
         if tokens[0] == "~" or tokens[0] == "/":
             for path in self.find_matching_path(tokens[1:], os.path.expanduser(tokens[0])):
                 new_filtered.append(PathEntry(path))
+        elif tokens[0] == "#":
+            tokens = tokens[1:]
+            
+            for name in self.chrome_book_marks:
+                hit = True
+                for token in tokens:
+                    if not (token.upper() in self.chrome_book_marks[name].getName().upper() or token.upper() in self.chrome_book_marks[name].url.upper()):
+                        hit = False
+                if hit: 
+                    new_filtered.append(self.chrome_book_marks[name])
         else:
             for name in self.entries:
                 contains = True

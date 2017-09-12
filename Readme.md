@@ -12,6 +12,9 @@ you only need to type parts of the name of your directory/file and it will be fo
 ![](https://i.imgur.com/4S7lBKy.png)
 ![](https://i.imgur.com/5tf3zih.png)
 
+### Search your Bookmarks (chrome and chromium) ###
+Preface with # + _space_ to search through your bookmarks
+
 
 ### It is learning! ###
 The launcher remembers which apps/files/directories you start/open and gives the one you like the most first

@@ -24,14 +24,14 @@ class AppEntry:
         executable = exec_str[0]
         args = exec_str[1:]
 
-        filtered_args = list([""])
+        filtered_args = list([executable])
 
         for arg in args:
             if not arg.startswith('%'):
                 filtered_args.append(arg)
 
         print(executable)
-        subprocess.Popen([executable])
+        subprocess.Popen(filtered_args)
         exit()
 
 

@@ -46,26 +46,15 @@ def update_selection(entry_object):
         RESULT_BOX.remove(child)
 
     for i in range(0,min(settings.MAX_ENTRIES,len(ENTRY_LAUNCHER.filtered_entries))):
-        label = Gtk.Label()
-        label.set_name("label")
-        label.set_text(ENTRY_LAUNCHER.filtered_entries[i].getName())
-        label.set_ellipsize(Pango.EllipsizeMode.START)
-        label.entry = ENTRY_LAUNCHER.filtered_entries[i]
-        label.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
-        #needed for obscure reasons to be clickable
-        label.set_has_window(True)
-        label.connect("button-press-event", clicked_label)
+        text = ENTRY_LAUNCHER.filtered_entries[i].getName()
+        if len(text) > settings.MAX_ENTRY_CHARS:
+            text = "..." + text[len(text) - settings.MAX_ENTRY_CHARS - 3:]
 
-        #needed so the labels dont expand
-        label.set_max_width_chars(1)
-
-        #button = Gtk.Button.new_from_icon_name(ENTRY_LAUNCHER.filtered_entries[i].getIcon(), 48)
-
-        #hbox = Gtk.Box(Gtk.Orientation.HORIZONTAL, 10)
-        #hbox.set_name("label")
-        #hbox.add(button)
-        #hbox.add(label)
-        RESULT_BOX.add(label)
+        button = Gtk.Button(label = text)
+        button.entry = ENTRY_LAUNCHER.filtered_entries[i]
+        button.connect("button-press-event", clicked_label)
+        button.set_name("label")
+        RESULT_BOX.add(button)
 
     RESULT_BOX.show_all()
 
@@ -140,11 +129,6 @@ def connect_signals():
     SEARCH_ENTRY.connect("changed", update_selection)
 
 def load_style_settings():
-    icon_provider = Gtk.CssProvider()
-    icon_provider.load_from_data(b'.button' + settings.ICON_STYLE)
-    Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), icon_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-
-    
     select_provider = Gtk.CssProvider()
     select_provider.load_from_data(b'#selected' + settings.SELECTED_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), select_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
@@ -155,12 +139,16 @@ def load_style_settings():
 
 
     entry_provider = Gtk.CssProvider()
-    entry_provider.load_from_data(b'#search' + settings.SEARCHBAR_STYLE)
+    entry_provider.load_from_data(b'#label' + settings.ENTRY_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), entry_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     search_provider = Gtk.CssProvider()
-    search_provider.load_from_data(b'#label' + settings.ENTRY_STYLE)
+    search_provider.load_from_data(b'#search' + settings.SEARCHBAR_STYLE)
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), search_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+    hover_provider = Gtk.CssProvider()
+    hover_provider.load_from_data(b'#label:hover' + settings.SELECTED_STYLE)
+    Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), hover_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
 #startup the whole system
 load_style_settings()

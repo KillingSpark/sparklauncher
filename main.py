@@ -104,6 +104,9 @@ def handle_keys(widget, key_event):
             SELECTED_INDEX -= 1
             RESULT_BOX.get_children()[SELECTED_INDEX].set_name("selected")
 
+    return True
+
+
 
 def exit_on_focus_lost(*_):
     locking.delete_lock_file()

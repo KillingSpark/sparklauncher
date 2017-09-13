@@ -47,25 +47,25 @@ def update_selection(entry_object):
 
     for i in range(0,min(settings.MAX_ENTRIES,len(ENTRY_LAUNCHER.filtered_entries))):
         label = Gtk.Label()
-        label.set_text("  " + ENTRY_LAUNCHER.filtered_entries[i].getName())
+        label.set_name("label")
+        label.set_text(ENTRY_LAUNCHER.filtered_entries[i].getName())
         label.set_ellipsize(Pango.EllipsizeMode.START)
         label.entry = ENTRY_LAUNCHER.filtered_entries[i]
         label.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
-        label.set_justify(Gtk.Justification.CENTER)
         #needed for obscure reasons to be clickable
         label.set_has_window(True)
         label.connect("button-press-event", clicked_label)
 
         #needed so the labels dont expand
-        label.set_max_width_chars(100)
+        label.set_max_width_chars(1)
 
-        button = Gtk.Button.new_from_icon_name(ENTRY_LAUNCHER.filtered_entries[i].getIcon(), 48)
+        #button = Gtk.Button.new_from_icon_name(ENTRY_LAUNCHER.filtered_entries[i].getIcon(), 48)
 
-        hbox = Gtk.Box(Gtk.Orientation.HORIZONTAL, 10)
-        hbox.set_name("label")
+        #hbox = Gtk.Box(Gtk.Orientation.HORIZONTAL, 10)
+        #hbox.set_name("label")
         #hbox.add(button)
-        hbox.add(label)
-        RESULT_BOX.add(hbox)
+        #hbox.add(label)
+        RESULT_BOX.add(label)
 
     RESULT_BOX.show_all()
 

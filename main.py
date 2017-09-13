@@ -79,6 +79,9 @@ def run_selected(_):
 def handle_keys(widget, key_event):
     global SELECTED_INDEX
 
+    #enter if the text lost focus
+    if key_event.keyval == 65293:
+        run_selected(widget)
 
     #esc key value
     if key_event.keyval == 65307:

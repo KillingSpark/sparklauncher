@@ -31,8 +31,8 @@ settings.py holds all the available settings. Get Wild!
 Sorry no install script yet, just put it anywhere, make main.py executable and have fun
 Maybe set a keyboard shortcut or whatever.
 
-Depends on PyGObject, refer to their installing manual: ![](https://python-gtk-3-tutorial.readthedocs.io/en/latest/install.html)  
-And on pyxdg (in pip) or python-xdg (in ubuntu repos) or get it from their website: ![](https://freedesktop.org/wiki/Software/pyxdg/)
+Depends on PyGObject, refer to their installing manual: [](https://python-gtk-3-tutorial.readthedocs.io/en/latest/install.html)  
+And on pyxdg (in pip) or python-xdg (in ubuntu repos) or get it from their website: [](https://freedesktop.org/wiki/Software/pyxdg/)
 
 # Notes #
 In your ~/.config/sparklauncher directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset.

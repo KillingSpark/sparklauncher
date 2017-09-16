@@ -69,8 +69,7 @@ def update_selection(entry_object):
             box = Gtk.VBox(0)
             box.pack_start(button, False, False, 0)
 
-        
-        
+        box.set_name("label")
         RESULT_BOX.add(box)
 
     RESULT_BOX.show_all()
@@ -101,19 +100,19 @@ def handle_keys(widget, key_event):
     elif key_event.keyval == 65364:
         if SELECTED_INDEX < len(RESULT_BOX.get_children()) - 1:
             if SELECTED_INDEX >= 0:
-                RESULT_BOX.get_children()[SELECTED_INDEX].set_name("label")
+                RESULT_BOX.get_children()[SELECTED_INDEX].get_children()[0].set_name("label")
 
             SELECTED_INDEX += 1
-            RESULT_BOX.get_children()[SELECTED_INDEX].set_name("selected")
-            return True
+            RESULT_BOX.get_children()[SELECTED_INDEX].get_children()[0].set_name("selected")
+        return True
 
     # up
     elif key_event.keyval == 65362:
         if SELECTED_INDEX > 0:
-            RESULT_BOX.get_children()[SELECTED_INDEX].set_name("label")
+            RESULT_BOX.get_children()[SELECTED_INDEX].get_children()[0].set_name("label")
             SELECTED_INDEX -= 1
-            RESULT_BOX.get_children()[SELECTED_INDEX].set_name("selected")
-            return True
+            RESULT_BOX.get_children()[SELECTED_INDEX].get_children()[0].set_name("selected")
+        return True
 
     return False
 

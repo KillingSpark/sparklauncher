@@ -12,3 +12,4 @@ ENTRY_STYLE = b'{ background: #696969; color: lightgrey; font-size: 19px;border:
 ICON_STYLE = b'{ background: #696969 ;color: lightgrey; font-size: 19px; border-radius: 0px}'
 SELECTED_STYLE = b'{ background: #434343; color: white; font-size: 19px;border: 0px;border-radius: 0px}'
 WINDOW_STYLE = b'{ background: #696969; color: lightgrey;}'
+JUSTIFY_ENTRY = "CENTER" #LEFT/RIGHT/CENTER

@@ -35,7 +35,8 @@ Depends on PyGObject, refer to their installing manual: [python-gtk3-installing]
 And on pyxdg (in pip) or python-xdg (in ubuntu repos) or get it from their website: [pyxdg](https://freedesktop.org/wiki/Software/pyxdg/)
 
 # Notes #
-In your ~/.config/sparklauncher directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset.
+In your ~/.config/sparklauncher directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset or edit
+the numbers to set the apps you want to have on the "front page".
 if the launcher crashes maybe the lockfile that prevents multiple instances might be still there preventing it from opening,
 delete ~/.config/sparklauncherlock to make it available again. this shouldnt happen tho.
 

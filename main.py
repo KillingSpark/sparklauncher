@@ -48,6 +48,7 @@ def exit_by_hide():
 
 def clicked_label(label_with_entry, _):
     label_with_entry.entry.start()
+    exit_by_hide()
 
 # the handlers for signals
 
@@ -92,11 +93,12 @@ def update_selection(entry_object):
 
 
 def run_selected(_):
-    exit_by_hide()
     if SELECTED_INDEX < 0:
         ENTRY_LAUNCHER.run_selected(0)
     else:
         ENTRY_LAUNCHER.run_selected(SELECTED_INDEX)
+
+    exit_by_hide()
 
 
 def handle_keys(widget, key_event):

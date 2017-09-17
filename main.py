@@ -87,8 +87,8 @@ def run_selected(_):
     MAIN_WINDOW.hide()
     if SELECTED_INDEX < 0:
         ENTRY_LAUNCHER.run_selected(0)
-
-    ENTRY_LAUNCHER.run_selected(SELECTED_INDEX)
+    else:
+        ENTRY_LAUNCHER.run_selected(SELECTED_INDEX)
 
 
 def handle_keys(widget, key_event):
@@ -97,6 +97,7 @@ def handle_keys(widget, key_event):
     # enter if the text lost focus
     if key_event.keyval == 65293:
         run_selected(widget)
+        return True
 
     # esc key value
     if key_event.keyval == 65307:

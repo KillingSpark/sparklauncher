@@ -13,6 +13,7 @@ import settings
 import launcher
 import os
 import threading
+import sys
 
 GObject.threads_init()
 
@@ -23,7 +24,11 @@ import locking
 if locking.check_lock_file():
     print("already running")
     fd = os.open(TRIGGER_FIFO, os.O_WRONLY)
-    os.write(fd, "open")
+    if len(sys.argv) > 1:
+        os.write(fd, sys.argv[1])
+    else:
+        os.write(fd, "show")
+
     os.close(fd)
     exit()
 
@@ -37,8 +42,11 @@ SEARCH_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 RESULT_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 SEARCH_ENTRY = Gtk.Entry()
 
+def exit_by_hide():
+    MAIN_WINDOW.hide()
+    SEARCH_ENTRY.set_text("")
 
-def clicked_label(label_with_entry, button_event):
+def clicked_label(label_with_entry, _):
     label_with_entry.entry.start()
 
 # the handlers for signals
@@ -84,7 +92,7 @@ def update_selection(entry_object):
 
 
 def run_selected(_):
-    MAIN_WINDOW.hide()
+    exit_by_hide()
     if SELECTED_INDEX < 0:
         ENTRY_LAUNCHER.run_selected(0)
     else:
@@ -101,7 +109,7 @@ def handle_keys(widget, key_event):
 
     # esc key value
     if key_event.keyval == 65307:
-        MAIN_WINDOW.hide()
+        exit_by_hide()
 
     # down
     elif key_event.keyval == 65364:
@@ -125,7 +133,7 @@ def handle_keys(widget, key_event):
 
 
 def hide_on_focus_lost(*_):
-    MAIN_WINDOW.hide()
+    exit_by_hide()
 
 
 # funcs for better readability
@@ -147,7 +155,7 @@ def setup_window():
 
 
 def connect_signals():
-    MAIN_WINDOW.connect("delete-event", MAIN_WINDOW.hide)
+    MAIN_WINDOW.connect("delete-event", exit_by_hide)
     MAIN_WINDOW.connect("key-press-event", handle_keys)
     MAIN_WINDOW.connect("focus-out-event", hide_on_focus_lost)
     SEARCH_ENTRY.connect("activate", run_selected)
@@ -192,10 +200,19 @@ def wait_on_fifo():
         os.mkfifo(TRIGGER_FIFO)
     while True:
         fd = os.open(TRIGGER_FIFO, os.O_RDONLY)
-        while os.read(fd, 1000):
-            pass
+        text = os.read(fd, 1000)
         os.close(fd)
-        GObject.idle_add(MAIN_WINDOW.show_all)
+
+        
+        if text == "hide":
+            exit_by_hide()
+        elif text == "reload":
+            ENTRY_LAUNCHER.reload()
+            update_selection(SEARCH_ENTRY)
+        elif text == "kill":
+            Gtk.main_quit()
+        else:
+            GObject.idle_add(MAIN_WINDOW.show_all)
     os.remove(TRIGGER_FIFO)
 
 

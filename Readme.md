@@ -28,13 +28,21 @@ settings.py holds all the available settings. Get Wild!
 
 # Installing #
 Sorry no install script yet, just put it anywhere, make main.py executable and have fun
-Maybe set a keyboard shortcut or whatever. The first time you open main.py it may take a second to load everyhing
-but after that the daemon is running and it will open immediatly
+Maybe set a keyboard shortcut or whatever. 
 
 Depends on:  
 1. PyGObject, refer to their installing manual: [python-gtk3-installing](https://python-gtk-3-tutorial.readthedocs.io/en/latest/install.html)  
 2. pyxdg (in pip) or python-xdg (in ubuntu repos) or get it from their website: [pyxdg](https://freedesktop.org/wiki/Software/pyxdg/)  
 3. xdg-open but that should be installed anyways by your distro
+
+# Usage #
+The first time you open main.py it may take a second to load everything
+but after that the daemon is running and it will open immediatly.  
+After the daemon is running you can send some signals to the Launcher:  
+1. call the main.py again without args: show the window
+2. main.py hide: hides the window
+2. main.py reload: reloads the desktop entries + bookmarks (needed if something changed)
+2. main.py kill: kills the daemon if needed/wanted. Needed to reload the styles if you are trying out some themeing
 
 # Notes #
 In your ~/.config/sparklauncher directory will be a file .sparklauncher which holds the info what you started how often. Delete it to reset or edit

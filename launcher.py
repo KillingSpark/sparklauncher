@@ -71,16 +71,13 @@ class Launcher:
 
         return bm_list
 
-    def __init__(self):
-        self.count_dict = {}
-
+    def load_counts(self):
         self.count_file_path = os.path.expanduser("~") + "/.config/sparklauncher/.sparklauncher"
         if os.path.exists(self.count_file_path):
             count_file = open(self.count_file_path, "r")
             self.count_dict = json.load(count_file)
 
-        #load chromium bookmarks
-        self.chrome_book_marks = {}
+    def load_bookmarks(self):
         self.book_marks_file_path = os.path.expanduser("~") + "/.config/chromium/Default/Bookmarks"
         if os.path.exists(self.book_marks_file_path):
             book_marks_file = open(self.book_marks_file_path, "r")
@@ -104,13 +101,19 @@ class Launcher:
             for bm in bm_list:
                 self.chrome_book_marks[bm.getName()] = bm
 
-        loaded = desktopEntryLoader.EntryLoader().load()
-        self.entries = {}
 
+    def reload(self):
+        #reset
+        self.count_dict = {}
+        self.chrome_book_marks = {}
+        self.entries = {}
+        self.ever_started = list()
+
+        self.load_counts()
+        self.load_bookmarks()
+        loaded = desktopEntryLoader.EntryLoader().load()
         for entry in loaded:
             self.entries[entry] = AppEntry(loaded[entry])
-
-        self.ever_started = list()
 
         for entry in self.entries:
             try:
@@ -119,6 +122,17 @@ class Launcher:
                 self.ever_started.append(self.entries[entry])
             except KeyError:
                 pass
+        
+
+
+
+    def __init__(self):
+        self.count_dict = {}
+        self.chrome_book_marks = {}
+        self.entries = {}
+        self.ever_started = list()
+
+        self.reload()
 
         self.filtered_entries = self.ever_started
         self.filtered_entries.sort(key=lambda x: x.getName())

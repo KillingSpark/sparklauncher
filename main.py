@@ -1,22 +1,31 @@
 #! /usr/bin/python2
 
-# check for running instance
-import locking
-if locking.check_lock_file():
-    print("already running")
-    exit()
-locking.create_lock_file()
-
 # import gtk stuff
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
+from gi.repository import GObject
 
 #import settings
 import settings
 import launcher
+import os
+import threading
+
+GObject.threads_init()
+
+TRIGGER_FIFO = "/tmp/sparklauncher.fifo"
+
+# check for running instance
+import locking
+if locking.check_lock_file():
+    print("already running")
+    fd = os.open(TRIGGER_FIFO, os.O_WRONLY)
+    os.write(fd, "open")
+    os.close(fd)
+    exit()
 
 # globals
 ENTRY_LAUNCHER = launcher.Launcher()
@@ -30,7 +39,6 @@ SEARCH_ENTRY = Gtk.Entry()
 
 
 def clicked_label(label_with_entry, button_event):
-    locking.delete_lock_file()
     label_with_entry.entry.start()
 
 # the handlers for signals
@@ -76,7 +84,6 @@ def update_selection(entry_object):
 
 
 def run_selected(_):
-    locking.delete_lock_file()
     MAIN_WINDOW.hide()
     if SELECTED_INDEX < 0:
         ENTRY_LAUNCHER.run_selected(0)
@@ -93,8 +100,7 @@ def handle_keys(widget, key_event):
 
     # esc key value
     if key_event.keyval == 65307:
-        locking.delete_lock_file()
-        Gtk.main_quit()
+        MAIN_WINDOW.hide()
 
     # down
     elif key_event.keyval == 65364:
@@ -117,9 +123,9 @@ def handle_keys(widget, key_event):
     return False
 
 
-def exit_on_focus_lost(*_):
-    locking.delete_lock_file()
-    Gtk.main_quit()
+def hide_on_focus_lost(*_):
+    MAIN_WINDOW.hide()
+
 
 # funcs for better readability
 
@@ -138,13 +144,11 @@ def setup_window():
     SEARCH_BOX.add(SEARCH_ENTRY)
     SEARCH_BOX.add(RESULT_BOX)
 
-    MAIN_WINDOW.show_all()
-
 
 def connect_signals():
-    MAIN_WINDOW.connect("delete-event", Gtk.main_quit)
+    MAIN_WINDOW.connect("delete-event", MAIN_WINDOW.hide)
     MAIN_WINDOW.connect("key-press-event", handle_keys)
-    MAIN_WINDOW.connect("focus-out-event", exit_on_focus_lost)
+    MAIN_WINDOW.connect("focus-out-event", hide_on_focus_lost)
     SEARCH_ENTRY.connect("activate", run_selected)
     SEARCH_ENTRY.connect("changed", update_selection)
 
@@ -175,11 +179,28 @@ def load_style_settings():
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(
     ), hover_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-
 # startup the whole system
 load_style_settings()
 setup_window()
 connect_signals()
 update_selection(SEARCH_ENTRY)
+MAIN_WINDOW.show_all()
+
+def wait_on_fifo():
+    if not os.path.exists(TRIGGER_FIFO):
+        os.mkfifo(TRIGGER_FIFO)
+    while True:
+        fd = os.open(TRIGGER_FIFO, os.O_RDONLY)
+        while os.read(fd, 1000):
+            pass
+        os.close(fd)
+        GObject.idle_add(MAIN_WINDOW.show_all)
+    os.remove(TRIGGER_FIFO)
+
+
+
+t = threading.Thread(target=wait_on_fifo)
+t.daemon = True
+t.start()
 
 Gtk.main()

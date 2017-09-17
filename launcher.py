@@ -32,7 +32,6 @@ class AppEntry:
 
         print(executable)
         subprocess.Popen(filtered_args)
-        exit()
 
 
 class PathEntry:
@@ -47,7 +46,6 @@ class PathEntry:
 
     def start(self):
         subprocess.call(["xdg-open", self.name])
-        exit()
 
 class BrowserEntry:
     def __init__(self, name, url):
@@ -62,7 +60,6 @@ class BrowserEntry:
 
     def start(self):
         subprocess.call(["xdg-open", self.url])
-        exit()
 
 class Launcher:
     def load_chrome_book_marks(self, subdict, bm_list):

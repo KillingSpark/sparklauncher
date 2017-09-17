@@ -33,8 +33,8 @@ SELECTED_INDEX = -1
 
 # gui globals
 MAIN_WINDOW = Gtk.Window()
-SEARCH_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-RESULT_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+SEARCH_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+RESULT_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 SEARCH_ENTRY = Gtk.Entry()
 
 

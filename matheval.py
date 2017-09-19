@@ -85,6 +85,7 @@ def parse(expression):
     scope_stack = list()
     scope_stack.append(Scope())
 
+    expression = expression.replace(")(", ")*(")
 
     current_number = ""
     for c in expression:

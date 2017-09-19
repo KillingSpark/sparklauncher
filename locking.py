@@ -7,6 +7,5 @@ def check_lock_file():
     try:
         fcntl.lockf(LOCK_FD, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except IOError, exception:
-        print("ERROR" + exception.message)
         return True
     return False

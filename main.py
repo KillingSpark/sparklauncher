@@ -22,7 +22,6 @@ TRIGGER_FIFO = "/tmp/sparklauncher.fifo"
 # check for running instance
 import locking
 if locking.check_lock_file():
-    print("already running")
     fd = os.open(TRIGGER_FIFO, os.O_WRONLY)
     if len(sys.argv) > 1:
         os.write(fd, sys.argv[1])
@@ -207,20 +206,24 @@ def wait_on_fifo():
 
         
         if text == "hide":
+            print("hiding")
             exit_by_hide()
         elif text == "reload":
+            print("reloading")
             ENTRY_LAUNCHER.reload()
             update_selection(SEARCH_ENTRY)
         elif text == "kill":
+            print("quitting")
             Gtk.main_quit()
         else:
+            print("showing")
             GObject.idle_add(MAIN_WINDOW.show_all)
     os.remove(TRIGGER_FIFO)
 
 
 
-t = threading.Thread(target=wait_on_fifo)
-t.daemon = True
-t.start()
+fifo_listen_thread = threading.Thread(target=wait_on_fifo)
+fifo_listen_thread.daemon = True
+fifo_listen_thread.start()
 
 Gtk.main()

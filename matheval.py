@@ -26,6 +26,14 @@ class Addition(Operation):
     def evaluate(self):
         return self.value1.evaluate() + self.value2.evaluate()
 
+class Subtraction(Operation):
+    def __init__(self):
+        super(Subtraction,self).__init__()
+        self.bind = 3
+
+    def evaluate(self):
+        return self.value1.evaluate() - self.value2.evaluate()
+
 class Multiplication(Operation):
     def __init__(self):
         super(Multiplication,self).__init__()
@@ -33,6 +41,14 @@ class Multiplication(Operation):
 
     def evaluate(self):
         return self.value1.evaluate() * self.value2.evaluate()
+
+class Division(Operation):
+    def __init__(self):
+        super(Division,self).__init__()
+        self.bind = 2
+
+    def evaluate(self):
+        return self.value1.evaluate() / self.value2.evaluate()
 
 class PowerOf(Operation):
     def __init__(self):
@@ -85,8 +101,12 @@ def parse(expression):
                 scope_stack[-1].list.append(Value(scope.evaluate()))
             elif c == "+":
                 scope_stack[-1].list.append(Addition())
+            elif c == "-":
+                scope_stack[-1].list.append(Subtraction())
             elif c == "*":
                 scope_stack[-1].list.append(Multiplication())
+            elif c == "/":
+                scope_stack[-1].list.append(Division())
             elif c == "^":
                 scope_stack[-1].list.append(PowerOf())
 

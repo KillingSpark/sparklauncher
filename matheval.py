@@ -88,7 +88,7 @@ def parse(expression):
 
     current_number = ""
     for c in expression:
-        if c.isdigit() or c == ".":
+        if c.isdigit() or c == "." or (current_number == "" and  c == "-"):
             current_number += c
         else:
             if not current_number == "":
@@ -109,6 +109,7 @@ def parse(expression):
                 scope_stack[-1].list.append(Division())
             elif c == "^":
                 scope_stack[-1].list.append(PowerOf())
+            
 
     if not current_number == "":
         scope_stack[-1].list.append(Value(float(current_number)))

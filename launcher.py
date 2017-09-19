@@ -101,6 +101,15 @@ class Launcher:
             for bm in bm_list:
                 self.chrome_book_marks[bm.getName()] = bm
 
+    def filter_ever_started(self):
+        for entry in self.entries:
+            try:
+                # if this worked it got started at least once
+                count = self.count_dict[entry]
+                self.ever_started.append(self.entries[entry])
+            except KeyError:
+                pass
+
 
     def reload(self):
         #reset
@@ -114,14 +123,9 @@ class Launcher:
         loaded = desktopEntryLoader.EntryLoader().load()
         for entry in loaded:
             self.entries[entry] = AppEntry(loaded[entry])
+        
+        self.filter_ever_started()
 
-        for entry in self.entries:
-            try:
-                # if this worked it got started at least once
-                count = self.count_dict[entry]
-                self.ever_started.append(self.entries[entry])
-            except KeyError:
-                pass
         
 
 
@@ -140,6 +144,8 @@ class Launcher:
 
     def filter(self, tokens):
         if len(tokens) == 1 and tokens[0] == '':
+            self.ever_started = list()
+            self.filter_ever_started()
             self.filtered_entries = self.ever_started
             return
 

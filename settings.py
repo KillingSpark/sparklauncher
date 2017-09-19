@@ -2,7 +2,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gdk
 
-MAX_ENTRIES = 10
+MAX_ENTRIES = 9
 MAX_ENTRY_CHARS = 39
 WIN_WIDTH = 600
 WIN_HEIGHT = 400

@@ -33,6 +33,13 @@ class AppEntry:
         print(executable)
         subprocess.Popen(filtered_args)
 
+class CalcEntry:
+    def __init__(self, text):
+        self.text = text
+
+    def getName(self):
+        return self.text
+
 
 class PathEntry:
     def __init__(self, path):
@@ -155,6 +162,15 @@ class Launcher:
         if tokens[0] == "~" or tokens[0] == "/":
             for path in self.find_matching_path(tokens[1:], os.path.expanduser(tokens[0])):
                 new_filtered.append(PathEntry(path))
+        elif tokens[0] == "!":
+            if(len(tokens[1:]) > 0):
+                res = "".join(tokens[1:])
+                try:
+                    res = eval(res)
+                    new_filtered.append(CalcEntry(str(res)))
+                except SyntaxError:
+                    pass
+                
         elif tokens[0] == "#":
             tokens = tokens[1:]
             
@@ -211,13 +227,16 @@ class Launcher:
             print(name)
 
     def run_selected(self, index):
-        selected = self.filtered_entries[index]
+        selected_entry = self.filtered_entries[index]
+        
+        if isinstance(selected_entry, CalcEntry):
+            return
 
         try:
-            self.count_dict[selected.getName()] += 1
+            self.count_dict[selected_entry.getName()] += 1
         except KeyError:
-            self.count_dict[selected.getName()] = 1
+            self.count_dict[selected_entry.getName()] = 1
 
 
         json.dump(self.count_dict, open(self.count_file_path, "w"))
-        selected.start()
+        selected_entry.start()

@@ -15,6 +15,9 @@ you only need to type parts of the name of your directory/file and it will be fo
 # Search your Bookmarks (chrome and chromium) #
 Preface with # + _space_ to search through your bookmarks
 
+# Use as a calculator #
+Type ! + _space_ and then insert your calculation you are too lazy to do in your head!
+
 # It is learning! #
 The launcher remembers which apps/files/directories you start/open and gives the one you like the most first
 

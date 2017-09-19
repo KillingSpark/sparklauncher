@@ -6,6 +6,7 @@ import json
 import subprocess
 
 import settings
+import matheval
 
 class AppEntry:
     def __init__(self, desk_entry):
@@ -162,11 +163,15 @@ class Launcher:
         if tokens[0] == "~" or tokens[0] == "/":
             for path in self.find_matching_path(tokens[1:], os.path.expanduser(tokens[0])):
                 new_filtered.append(PathEntry(path))
+
         elif tokens[0] == "!":
             if(len(tokens[1:]) > 0):
                 res = "".join(tokens[1:])
                 try:
-                    res = eval(res)
+                    try:
+                        res = matheval.parse(res)
+                    except:
+                        res = ""
                     new_filtered.append(CalcEntry(str(res)))
                 except SyntaxError:
                     pass

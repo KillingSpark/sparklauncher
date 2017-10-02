@@ -2,6 +2,14 @@ SparkLauncher
 =============
 The bestestes launcher in the whole universe WoopDee$$$$ingDoo
 
+# What sets this apart #
+1. [Albert](https://github.com/albertlauncher/albert) mixes all search result types (like files and apps), sparklauncher separates them in modes
+  
+2. [Rofi](https://github.com/DaveDavenport/rofi) has separate modes, but you need extra shortcuts to open them so switching them isn't really comfortable
+
+3. The name is an obvious bonus point 
+
+
 # Search all yours Apps! #
 Just type parts of the name and your faithful launcher will find your hearths desire
 ![](https://i.imgur.com/Mkq6WyE.png)

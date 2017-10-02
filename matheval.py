@@ -1,3 +1,5 @@
+import math
+
 class Expression(object):
     def __init__(self):
         self.bind = 0
@@ -9,54 +11,82 @@ class Value(Expression):
     def __init__(self, value):
         self.bind = 4
         self.value = value
+        self.argpos = [0]
 
     def evaluate(self):
         return self.value
 
 class Operation(Expression):
-    def __init__(self, value1=Value(0), value2=Value(0)):
-        self.value1 = value1
-        self.value2 = value2
+    def __init__(self):
+        self.args = list()
 
 class Addition(Operation):
     def __init__(self):
         super(Addition,self).__init__()
         self.bind = 3
+        self.argpos = [-1, 1]
 
     def evaluate(self):
-        return self.value1.evaluate() + self.value2.evaluate()
+        return self.args[0].evaluate() + self.args[1].evaluate()
 
 class Subtraction(Operation):
     def __init__(self):
         super(Subtraction,self).__init__()
         self.bind = 3
+        self.argpos = [-1, 1]
 
     def evaluate(self):
-        return self.value1.evaluate() - self.value2.evaluate()
+        return self.args[0].evaluate() - self.args[1].evaluate()
 
 class Multiplication(Operation):
     def __init__(self):
         super(Multiplication,self).__init__()
         self.bind = 2
+        self.argpos = [-1, 1]
 
     def evaluate(self):
-        return self.value1.evaluate() * self.value2.evaluate()
+        return self.args[0].evaluate() * self.args[1].evaluate()
 
 class Division(Operation):
     def __init__(self):
         super(Division,self).__init__()
         self.bind = 2
+        self.argpos = [-1, 1]
 
     def evaluate(self):
-        return self.value1.evaluate() / self.value2.evaluate()
+        return self.args[0].evaluate() / self.args[1].evaluate()
 
 class PowerOf(Operation):
     def __init__(self):
         super(PowerOf,self).__init__()
         self.bind = 1
+        self.argpos = [-1, 1]
 
     def evaluate(self):
-        return self.value1.evaluate() ** self.value2.evaluate()
+        return self.args[0].evaluate() ** self.args[1].evaluate()
+
+class SquareRoot(Operation):
+    def __init__(self):
+        super(SquareRoot,self).__init__()
+        self.bind = 1
+        self.argpos = [1]
+
+    def evaluate(self):
+        return math.sqrt(self.args[0].evaluate())
+
+class Factorial(Operation):
+    def __init__(self):
+        super(Factorial,self).__init__()
+        self.bind = 1
+        self.argpos = [-1]
+
+    def evaluate(self):
+        res = 1
+        curr = self.args[0].evaluate()
+        while curr > 1:
+            res *= curr
+            curr -= 1
+        return res
 
 class Scope(Expression):
     def __init__(self):
@@ -65,27 +95,41 @@ class Scope(Expression):
 
     def evaluate(self):
         curr_bind = 0
-        while len(self.list) > 1 and curr_bind < 5:
-            max_len = len(self.list)
+        while len(self.list) > 1 and curr_bind < 4:
             index = 0
-            while index < max_len:
+            while index < len(self.list):
                 exp = self.list[index]
                 if exp.bind == curr_bind:
-                    exp.value1 = self.list[index-1]
-                    exp.value2 = self.list[index+1]
-                    self.list.pop(index+1)
-                    self.list.pop(index-1)
-                    max_len -= 2
-                else: index += 1
+                    
+                    for pos in exp.argpos:
+                        exp.args.append(self.list[index + pos])
+
+                    popargpos = exp.argpos[:]
+                    popargpos.sort(reverse=True)
+                    for pos in popargpos:
+                        self.list.pop(index + pos)
+
+                    indexdiff = 1
+                    for pos in popargpos:
+                        if pos < 0:
+                            indexdiff += pos
+
+                    index += indexdiff
+                else:
+                    index += 1
             curr_bind += 1
 
-        return self.list[0].evaluate()
+        if len(self.list) == 0:
+            return 0
+        else:
+            return self.list[0].evaluate()
 
 def parse(expression):
     scope_stack = list()
     scope_stack.append(Scope())
 
     expression = expression.replace(")(", ")*(")
+    expression = expression.replace("sqrt", "s")
 
     current_number = ""
     for c in expression:
@@ -110,6 +154,10 @@ def parse(expression):
                 scope_stack[-1].list.append(Division())
             elif c == "^":
                 scope_stack[-1].list.append(PowerOf())
+            elif c == "s":
+                scope_stack[-1].list.append(SquareRoot())
+            elif c == "!":
+                scope_stack[-1].list.append(Factorial())
             
 
     if not current_number == "":
@@ -117,5 +165,5 @@ def parse(expression):
     
     return scope_stack[0].evaluate()
             
-#s = parse("(3+2)^2*4")
-#print(s)
+s = parse("s((3!)+(((3))+(-0)^0))")
+print(s)

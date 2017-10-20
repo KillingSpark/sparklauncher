@@ -19,7 +19,7 @@ GObject.threads_init()
 
 TRIGGER_FIFO = "/tmp/sparklauncher.fifo"
 
-# check for running instance
+# check for running instance and send the signal if already running
 import locking
 if locking.check_lock_file():
     fd = os.open(TRIGGER_FIFO, os.O_WRONLY)
@@ -29,6 +29,10 @@ if locking.check_lock_file():
         os.write(fd, "show")
 
     os.close(fd)
+    exit()
+
+if not (len(sys.argv) == 1 or sys.argv[1] == "daemon"):
+    print("no instance running")
     exit()
 
 # globals
@@ -194,7 +198,9 @@ load_style_settings()
 setup_window()
 connect_signals()
 update_selection(SEARCH_ENTRY)
-MAIN_WINDOW.show_all()
+
+if not sys.argv[1] == "daemon":
+    MAIN_WINDOW.show_all()
 
 def wait_on_fifo():
     if not os.path.exists(TRIGGER_FIFO):

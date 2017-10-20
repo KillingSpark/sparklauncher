@@ -221,6 +221,8 @@ def wait_on_fifo():
         elif text == "kill":
             print("quitting")
             Gtk.main_quit()
+        elif text == "daemon":
+            pass
         else:
             print("showing")
             GObject.idle_add(MAIN_WINDOW.show_all)

@@ -22,6 +22,11 @@ TRIGGER_FIFO = "/tmp/sparklauncher.fifo"
 # check for running instance and send the signal if already running
 import locking
 if locking.check_lock_file():
+
+    if len(sys.argv) > 1 and sys.argv[1] == "daemon":
+       print("instance already running")
+       exit()
+
     fd = os.open(TRIGGER_FIFO, os.O_WRONLY)
     if len(sys.argv) > 1:
         os.write(fd, sys.argv[1])
@@ -221,8 +226,6 @@ def wait_on_fifo():
         elif text == "kill":
             print("quitting")
             Gtk.main_quit()
-        elif text == "daemon":
-            pass
         else:
             print("showing")
             GObject.idle_add(MAIN_WINDOW.show_all)

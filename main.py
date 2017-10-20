@@ -199,7 +199,7 @@ setup_window()
 connect_signals()
 update_selection(SEARCH_ENTRY)
 
-if not sys.argv[1] == "daemon":
+if len(sys.argv) == 1 or not sys.argv[1] == "daemon":
     MAIN_WINDOW.show_all()
 
 def wait_on_fifo():

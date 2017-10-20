@@ -164,6 +164,3 @@ def parse(expression):
         scope_stack[-1].list.append(Value(float(current_number)))
     
     return scope_stack[0].evaluate()
-            
-s = parse("s((3!)+(((3))+(-0)^0))")
-print(s)

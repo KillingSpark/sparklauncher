@@ -8,24 +8,24 @@ from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import GObject
 
-#import settings
+# import settings
 import settings
 import launcher
 import os
 import threading
 import sys
+import locking
 
 GObject.threads_init()
 
 TRIGGER_FIFO = "/tmp/sparklauncher.fifo"
 
 # check for running instance and send the signal if already running
-import locking
 if locking.check_lock_file():
 
     if len(sys.argv) > 1 and sys.argv[1] == "daemon":
-       print("instance already running")
-       exit()
+        print("instance already running")
+        exit()
 
     fd = os.open(TRIGGER_FIFO, os.O_WRONLY)
     if len(sys.argv) > 1:
@@ -50,9 +50,11 @@ SEARCH_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 RESULT_BOX = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 SEARCH_ENTRY = Gtk.Entry()
 
+
 def exit_by_hide():
     MAIN_WINDOW.hide()
     SEARCH_ENTRY.set_text("")
+
 
 def clicked_label(label_with_entry, _):
     label_with_entry.entry.start()
@@ -198,6 +200,7 @@ def load_style_settings():
     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(
     ), hover_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
+
 # startup the whole system
 load_style_settings()
 setup_window()
@@ -207,6 +210,7 @@ update_selection(SEARCH_ENTRY)
 if len(sys.argv) == 1 or not sys.argv[1] == "daemon":
     MAIN_WINDOW.show_all()
 
+
 def wait_on_fifo():
     if not os.path.exists(TRIGGER_FIFO):
         os.mkfifo(TRIGGER_FIFO)
@@ -215,7 +219,6 @@ def wait_on_fifo():
         text = os.read(fd, 1000)
         os.close(fd)
 
-        
         if text == "hide":
             print("hiding")
             exit_by_hide()
@@ -230,7 +233,6 @@ def wait_on_fifo():
             print("showing")
             GObject.idle_add(MAIN_WINDOW.show_all)
     os.remove(TRIGGER_FIFO)
-
 
 
 fifo_listen_thread = threading.Thread(target=wait_on_fifo)

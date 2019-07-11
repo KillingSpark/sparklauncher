@@ -4,6 +4,8 @@ import copy
 import os
 import json
 import subprocess
+import dbus
+import clipboard
 
 import settings
 import matheval
@@ -48,6 +50,7 @@ class PathEntry:
 
     def getName(self):
         return self.name
+        
 
     def getIcon(self):
         return "folder"
@@ -69,7 +72,29 @@ class BrowserEntry:
     def start(self):
         subprocess.call(["xdg-open", self.url])
 
+class PasswordEntry:
+    def __init__(self, name, service):
+        self.name = name
+        self.service = service
+
+    def getName(self):
+        return self.name[43:]
+
+    def start(self):
+        result = self.service.RetrieveSecrets([self.name], dbus_interface="org.freedesktop.Secrets.Service")[0]
+        p = subprocess.Popen(["xclip","-sel","clip"], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        p.stdin.write(result)
+        print("written")
+        
+
 class Launcher:
+    def search_dbus(self, tokens):
+        search_dict = {"":""}
+        self.secrets_service = self.session_bus.get_object('spark.pass', '/org/freedesktop/Secrets')
+        result = self.secrets_service.SearchCollections(search_dict, dbus_interface="org.freedesktop.Secrets.Service")
+        return result[0]
+
+
     def load_chrome_book_marks(self, subdict, bm_list):
         if subdict["type"] == "url":
             bm_list.append(BrowserEntry(subdict["name"], subdict["url"]))
@@ -150,6 +175,8 @@ class Launcher:
         self.filtered_entries.sort(key=lambda x: x.getName())
         self.filtered_entries.sort(key=self.map_entry_count, reverse=True)
 
+        self.session_bus = dbus.SessionBus()
+
     def filter(self, tokens):
         if len(tokens) == 1 and tokens[0] == '':
             self.ever_started = list()
@@ -163,6 +190,13 @@ class Launcher:
         if tokens[0] == "~" or tokens[0] == "/":
             for path in self.find_matching_path(tokens[1:], os.path.expanduser(tokens[0])):
                 new_filtered.append(PathEntry(path))
+        
+        elif tokens[0] == "$":
+            new_filtered.append(PathEntry(tokens[1]))
+
+        elif tokens[0] == "%":
+            for pw in self.search_dbus(tokens[1:]):
+                new_filtered.append(PasswordEntry(pw, self.secrets_service))
 
         elif tokens[0] == "!":
             if(len(tokens[1:]) > 0):

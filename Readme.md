@@ -45,6 +45,7 @@ Depends on:
 1. PyGObject, refer to their installing manual: [python-gtk3-installing](https://python-gtk-3-tutorial.readthedocs.io/en/latest/install.html)  
 2. pyxdg (in pip) or python-xdg (in ubuntu repos) or get it from their website: [pyxdg](https://freedesktop.org/wiki/Software/pyxdg/)  
 3. xdg-open but that should be installed anyways by your distro
+4. xclip for copying passwords to your clipboard
 
 # Usage #
 The first time you open main.py it may take a second to load everything
